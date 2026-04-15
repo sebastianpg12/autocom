@@ -25,14 +25,10 @@ app.get('/lead/:id', (req, res) => {
   const existingLead = mockLeads.find(l => l.Id === leadId);
   
   if (existingLead) {
-    // Return a copy without the internal Id if preferred, 
-    // but the user asked for specific fields in the JSON.
     const { Id, ...leadData } = existingLead;
-    return res.json(leadData);
+    return res.jsonp(leadData);
   }
 
-  // 2. If not found, generate a dynamic response based on the ID
-  // This satisfies the "dynamic response" optional requirement
   const dynamicLead = {
     "CreatedOn": new Date().toISOString(),
     "MobilePhone": `+521${leadId.slice(-9).padEnd(9, '0')}`,
@@ -48,7 +44,7 @@ app.get('/lead/:id', (req, res) => {
     "AutocomVehicleVIN": `VIN${leadId.toUpperCase().slice(-10)}`
   };
 
-  res.json(dynamicLead);
+  res.jsonp(dynamicLead);
 });
 
 app.listen(PORT, () => {
